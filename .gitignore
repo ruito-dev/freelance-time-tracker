@@ -1,0 +1,35 @@
+# See https://help.github.com/articles/ignoring-files for more about ignoring files.
+
+# Backend
+/backend/tmp/
+/backend/log/
+/backend/storage/
+/backend/.byebug_history
+/backend/config/master.key
+/backend/config/credentials/*.key
+
+# Frontend
+/frontend/node_modules/
+/frontend/dist/
+/frontend/.env
+/frontend/.env.local
+/frontend/.env.*.local
+
+# Docker
+*.log
+
+# OS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
