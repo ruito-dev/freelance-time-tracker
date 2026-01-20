@@ -18,6 +18,13 @@ Rails.application.routes.draw do
         post "refresh", to: "authentication#refresh"
         get "me", to: "authentication#me"
       end
+
+      # リソース
+      resources :projects do
+        resources :tasks, only: [ :index, :create ]
+      end
+      resources :tasks, only: [ :show, :update, :destroy ]
+      resources :time_entries
     end
   end
 end
