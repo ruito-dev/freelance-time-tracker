@@ -11,7 +11,7 @@ class TimeEntry < ApplicationRecord
 
   def stop!
     return if ended_at.present?
-    
+
     self.ended_at = Time.current
     calculate_duration
     save!

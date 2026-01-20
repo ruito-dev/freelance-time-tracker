@@ -5,5 +5,5 @@ class Task < ApplicationRecord
   validates :title, presence: true
   validates :status, presence: true, inclusion: { in: %w[todo in_progress done] }
 
-  enum :status, { todo: 'todo', in_progress: 'in_progress', done: 'done' }, default: :todo
+  enum :status, { todo: "todo", in_progress: "in_progress", done: "done" }, default: :todo
 end

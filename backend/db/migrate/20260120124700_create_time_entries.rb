@@ -9,7 +9,7 @@ class CreateTimeEntries < ActiveRecord::Migration[8.1]
       t.timestamps
     end
 
-    add_index :time_entries, [:task_id, :started_at]
+    add_index :time_entries, [ :task_id, :started_at ]
     add_index :time_entries, :ended_at
   end
 end
