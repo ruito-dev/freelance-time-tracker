@@ -7,6 +7,8 @@
 /backend/.byebug_history
 /backend/config/master.key
 /backend/config/credentials/*.key
+/backend/coverage/
+/backend/.rspec_status
 
 # Frontend
 /frontend/node_modules/
