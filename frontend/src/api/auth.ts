@@ -14,7 +14,7 @@ export const authApi = {
 
   // ログイン
   login: async (data: LoginRequest): Promise<AuthResponse> => {
-    const response = await apiClient.post<AuthResponse>('/api/v1/auth/login', { user: data });
+    const response = await apiClient.post<AuthResponse>('/api/v1/auth/login', data);
     if (response.data.token) {
       storage.setToken(response.data.token);
     }
