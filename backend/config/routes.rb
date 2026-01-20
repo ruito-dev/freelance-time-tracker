@@ -23,7 +23,7 @@ Rails.application.routes.draw do
       resources :projects do
         resources :tasks, only: [ :index, :create ]
       end
-      resources :tasks, only: [ :show, :update, :destroy ]
+      resources :tasks, only: [ :index, :show, :update, :destroy ]
       resources :time_entries
     end
   end

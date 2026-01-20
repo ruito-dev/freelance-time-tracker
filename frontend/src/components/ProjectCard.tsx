@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom';
 import type { Project } from '../types/project';
 
 interface ProjectCardProps {
@@ -7,6 +8,8 @@ interface ProjectCardProps {
 }
 
 export const ProjectCard = ({ project, onEdit, onDelete }: ProjectCardProps) => {
+  const navigate = useNavigate();
+
   const handleDelete = () => {
     if (window.confirm(`「${project.name}」を削除してもよろしいですか？`)) {
       onDelete(project.id);
@@ -45,7 +48,10 @@ export const ProjectCard = ({ project, onEdit, onDelete }: ProjectCardProps) => 
       {project.description && <p className="text-gray-600 text-sm mb-4">{project.description}</p>}
 
       <div className="flex items-center gap-4 text-sm text-gray-500">
-        <div className="flex items-center gap-1">
+        <button
+          onClick={() => navigate(`/tasks?project=${project.id}`)}
+          className="flex items-center gap-1 hover:text-indigo-600 transition-colors"
+        >
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path
               strokeLinecap="round"
@@ -55,7 +61,7 @@ export const ProjectCard = ({ project, onEdit, onDelete }: ProjectCardProps) => 
             />
           </svg>
           <span>{project.tasks_count || 0} タスク</span>
-        </div>
+        </button>
         <div className="flex items-center gap-1">
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path
