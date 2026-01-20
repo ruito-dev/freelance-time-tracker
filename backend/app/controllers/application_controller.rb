@@ -1,10 +1,6 @@
 # frozen_string_literal: true
 
 class ApplicationController < ActionController::API
-  # API専用アプリケーションのため、セッションとCSRF保護を無効化
-  include ActionController::Cookies
-  protect_from_forgery with: :null_session
-
   # 認証エラーをキャッチ
   rescue_from ActiveRecord::RecordNotFound, with: :not_found_response
 
