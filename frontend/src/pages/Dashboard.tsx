@@ -41,7 +41,7 @@ export const Dashboard = () => {
             <h2 className="text-2xl font-bold text-gray-900 mb-4">ダッシュボード</h2>
             <p className="text-gray-600 mb-6">ようこそ、{user?.name}さん！</p>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
               <button
                 onClick={() => navigate('/projects')}
                 className="p-6 border-2 border-gray-200 rounded-lg hover:border-indigo-500 hover:shadow-md transition-all text-left"
@@ -88,10 +88,13 @@ export const Dashboard = () => {
                 <p className="text-gray-600 text-sm">タスクの管理</p>
               </button>
 
-              <div className="p-6 border-2 border-gray-200 rounded-lg opacity-50">
+              <button
+                onClick={() => navigate('/time-tracking')}
+                className="p-6 border-2 border-gray-200 rounded-lg hover:border-indigo-500 hover:shadow-md transition-all text-left"
+              >
                 <div className="flex items-center gap-3 mb-2">
                   <svg
-                    className="w-8 h-8 text-gray-400"
+                    className="w-8 h-8 text-indigo-600"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -105,8 +108,31 @@ export const Dashboard = () => {
                   </svg>
                   <h3 className="text-lg font-semibold text-gray-900">時間記録</h3>
                 </div>
-                <p className="text-gray-600 text-sm">作業時間の記録（準備中）</p>
-              </div>
+                <p className="text-gray-600 text-sm">作業時間の記録</p>
+              </button>
+
+              <button
+                onClick={() => navigate('/reports')}
+                className="p-6 border-2 border-gray-200 rounded-lg hover:border-indigo-500 hover:shadow-md transition-all text-left"
+              >
+                <div className="flex items-center gap-3 mb-2">
+                  <svg
+                    className="w-8 h-8 text-indigo-600"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
+                    />
+                  </svg>
+                  <h3 className="text-lg font-semibold text-gray-900">レポート</h3>
+                </div>
+                <p className="text-gray-600 text-sm">作業時間の分析</p>
+              </button>
             </div>
           </div>
         </div>
