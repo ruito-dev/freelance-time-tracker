@@ -138,7 +138,7 @@ export const Tasks = () => {
     <Layout>
       <div className="mb-6">
         <h1 className="text-2xl font-bold text-gray-900 mb-4">タスク管理</h1>
-        
+
         {/* 検索バー */}
         <div className="mb-4">
           <SearchBar

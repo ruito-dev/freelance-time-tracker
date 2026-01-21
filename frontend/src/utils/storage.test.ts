@@ -49,9 +49,9 @@ describe('storage', () => {
     it('localStorageの全データをクリアする', () => {
       localStorage.setItem('auth_token', 'test-token');
       localStorage.setItem('other_key', 'other-value');
-      
+
       storage.clearAll();
-      
+
       expect(localStorage.getItem('auth_token')).toBeNull();
       expect(localStorage.getItem('other_key')).toBeNull();
       expect(localStorage.length).toBe(0);
@@ -66,11 +66,11 @@ describe('storage', () => {
     it('トークンのライフサイクル全体が正しく動作する', () => {
       // トークンが存在しない
       expect(storage.getToken()).toBeNull();
-      
+
       // トークンを設定
       storage.setToken('lifecycle-token');
       expect(storage.getToken()).toBe('lifecycle-token');
-      
+
       // トークンを削除
       storage.removeToken();
       expect(storage.getToken()).toBeNull();
@@ -80,11 +80,11 @@ describe('storage', () => {
       storage.setToken('token-1');
       localStorage.setItem('user_data', 'some-data');
       localStorage.setItem('preferences', 'some-prefs');
-      
+
       expect(localStorage.length).toBe(3);
-      
+
       storage.clearAll();
-      
+
       expect(localStorage.length).toBe(0);
       expect(storage.getToken()).toBeNull();
     });

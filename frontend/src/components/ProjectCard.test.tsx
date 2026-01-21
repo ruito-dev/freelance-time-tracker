@@ -114,10 +114,10 @@ describe('ProjectCard', () => {
     it('編集ボタンをクリックするとonEditが呼ばれる', async () => {
       const user = userEvent.setup();
       renderProjectCard();
-      
+
       const editButton = screen.getByRole('button', { name: '編集' });
       await user.click(editButton);
-      
+
       expect(mockOnEdit).toHaveBeenCalledWith(mockProject);
       expect(mockOnEdit).toHaveBeenCalledTimes(1);
     });
@@ -126,11 +126,13 @@ describe('ProjectCard', () => {
       const user = userEvent.setup();
       window.confirm = vi.fn(() => true);
       renderProjectCard();
-      
+
       const deleteButton = screen.getByRole('button', { name: '削除' });
       await user.click(deleteButton);
-      
-      expect(window.confirm).toHaveBeenCalledWith('「テストプロジェクト」を削除してもよろしいですか？');
+
+      expect(window.confirm).toHaveBeenCalledWith(
+        '「テストプロジェクト」を削除してもよろしいですか？'
+      );
       expect(mockOnDelete).toHaveBeenCalledWith(1);
       expect(mockOnDelete).toHaveBeenCalledTimes(1);
     });
@@ -139,10 +141,10 @@ describe('ProjectCard', () => {
       const user = userEvent.setup();
       window.confirm = vi.fn(() => false);
       renderProjectCard();
-      
+
       const deleteButton = screen.getByRole('button', { name: '削除' });
       await user.click(deleteButton);
-      
+
       expect(window.confirm).toHaveBeenCalled();
       expect(mockOnDelete).not.toHaveBeenCalled();
     });
@@ -150,10 +152,10 @@ describe('ProjectCard', () => {
     it('タスク数をクリックするとタスクページに遷移する', async () => {
       const user = userEvent.setup();
       renderProjectCard();
-      
+
       const tasksButton = screen.getByText('5 タスク').closest('button');
       await user.click(tasksButton!);
-      
+
       expect(mockNavigate).toHaveBeenCalledWith('/tasks?project=1');
       expect(mockNavigate).toHaveBeenCalledTimes(1);
     });

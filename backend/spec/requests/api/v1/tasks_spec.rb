@@ -124,7 +124,7 @@ RSpec.describe 'Api::V1::Tasks', type: :request do
 
     context 'when authenticated' do
       it 'updates the task' do
-        patch "/api/v1/tasks/#{task.id}", 
+        patch "/api/v1/tasks/#{task.id}",
               params: { task: { title: 'Updated Title', status: 'in_progress' } },
               headers: headers
         expect(response).to have_http_status(:ok)

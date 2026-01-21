@@ -74,7 +74,7 @@ module Api
         end
 
         total_duration = @time_entries.sum(:duration)
-        
+
         render json: { total_duration: total_duration }
       end
 

@@ -49,7 +49,10 @@ export const Reports = () => {
   const taskStats = useMemo(() => {
     if (!timeEntries) return [];
 
-    const stats = new Map<number, { title: string; projectName: string; hours: number; count: number }>();
+    const stats = new Map<
+      number,
+      { title: string; projectName: string; hours: number; count: number }
+    >();
 
     timeEntries.forEach((entry) => {
       if (!entry.ended_at) return;
@@ -113,12 +116,7 @@ export const Reports = () => {
   const handleExportTaskStats = () => {
     const data = [
       ['タスク名', 'プロジェクト名', '作業時間（時間）', '記録数'],
-      ...taskStats.map((stat) => [
-        stat.title,
-        stat.projectName,
-        stat.hours.toFixed(2),
-        stat.count,
-      ]),
+      ...taskStats.map((stat) => [stat.title, stat.projectName, stat.hours.toFixed(2), stat.count]),
     ];
     exportToCSV(data, `タスク別レポート_${formatDateForFilename()}.csv`);
   };
@@ -185,9 +183,7 @@ export const Reports = () => {
       <div className="bg-white rounded-lg shadow p-4 mb-6">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              プロジェクト
-            </label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">プロジェクト</label>
             <select
               value={selectedProjectId}
               onChange={(e) => setSelectedProjectId(Number(e.target.value))}
@@ -203,9 +199,7 @@ export const Reports = () => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              開始日
-            </label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">開始日</label>
             <input
               type="date"
               value={startDate}
@@ -215,9 +209,7 @@ export const Reports = () => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              終了日
-            </label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">終了日</label>
             <input
               type="date"
               value={endDate}
@@ -345,9 +337,7 @@ export const Reports = () => {
                         <td className="px-4 py-3 text-sm text-gray-900 text-right">
                           {stat.hours.toFixed(1)}h
                         </td>
-                        <td className="px-4 py-3 text-sm text-gray-600 text-right">
-                          {stat.count}
-                        </td>
+                        <td className="px-4 py-3 text-sm text-gray-600 text-right">{stat.count}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -382,9 +372,14 @@ export const Reports = () => {
             {dailyStats.length > 0 ? (
               <div className="space-y-2">
                 {dailyStats.map((stat, index) => (
-                  <div key={index} className="flex items-center justify-between py-2 border-b border-gray-100">
+                  <div
+                    key={index}
+                    className="flex items-center justify-between py-2 border-b border-gray-100"
+                  >
                     <span className="text-sm text-gray-900">{stat.date}</span>
-                    <span className="text-sm font-medium text-gray-900">{stat.hours.toFixed(1)}h</span>
+                    <span className="text-sm font-medium text-gray-900">
+                      {stat.hours.toFixed(1)}h
+                    </span>
                   </div>
                 ))}
               </div>
