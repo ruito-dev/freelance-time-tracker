@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { TaskCard } from '../components/TaskCard';
 import { TaskFormModal } from '../components/TaskFormModal';
+import { SearchBar } from '../components/SearchBar';
 import { Layout } from '../components/Layout';
 import { useTasks, useCreateTask, useUpdateTask, useDeleteTask } from '../hooks/useTasks';
 import { useProjects } from '../hooks/useProjects';
@@ -21,6 +22,8 @@ export const Tasks = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingTask, setEditingTask] = useState<Task | null>(null);
   const [statusFilter, setStatusFilter] = useState<Task['status'] | 'all'>('all');
+  const [priorityFilter, setPriorityFilter] = useState<Task['priority'] | 'all'>('all');
+  const [searchQuery, setSearchQuery] = useState('');
 
   const handleCreateTask = () => {
     setEditingTask(null);
@@ -81,15 +84,38 @@ export const Tasks = () => {
     }
   };
 
-  const filteredTasks = tasks?.filter((task) => {
-    if (statusFilter === 'all') return true;
-    return task.status === statusFilter;
-  });
+  // フィルタリング
+  const filteredTasks = useMemo(() => {
+    if (!tasks) return [];
+
+    return tasks.filter((task) => {
+      // ステータスフィルター
+      if (statusFilter !== 'all' && task.status !== statusFilter) {
+        return false;
+      }
+
+      // 優先度フィルター
+      if (priorityFilter !== 'all' && task.priority !== priorityFilter) {
+        return false;
+      }
+
+      // 検索フィルター
+      if (searchQuery) {
+        const query = searchQuery.toLowerCase();
+        return (
+          task.title.toLowerCase().includes(query) ||
+          task.description?.toLowerCase().includes(query)
+        );
+      }
+
+      return true;
+    });
+  }, [tasks, statusFilter, priorityFilter, searchQuery]);
 
   const groupedTasks = {
-    todo: filteredTasks?.filter((t) => t.status === 'todo') || [],
-    in_progress: filteredTasks?.filter((t) => t.status === 'in_progress') || [],
-    done: filteredTasks?.filter((t) => t.status === 'done') || [],
+    todo: filteredTasks.filter((t) => t.status === 'todo'),
+    in_progress: filteredTasks.filter((t) => t.status === 'in_progress'),
+    done: filteredTasks.filter((t) => t.status === 'done'),
   };
 
   if (isLoading) {
@@ -112,8 +138,19 @@ export const Tasks = () => {
     <Layout>
       <div className="mb-6">
         <h1 className="text-2xl font-bold text-gray-900 mb-4">タスク管理</h1>
-        <div className="flex items-center justify-between gap-4">
-          <div className="flex items-center gap-4">
+        
+        {/* 検索バー */}
+        <div className="mb-4">
+          <SearchBar
+            value={searchQuery}
+            onChange={setSearchQuery}
+            placeholder="タスク名または説明で検索..."
+          />
+        </div>
+
+        {/* フィルター */}
+        <div className="flex items-center justify-between gap-4 mb-4">
+          <div className="flex items-center gap-4 flex-wrap">
             <select
               value={projectId || 'all'}
               onChange={handleProjectFilter}
@@ -138,12 +175,26 @@ export const Tasks = () => {
               <option value="done">完了</option>
             </select>
 
-            <p className="text-gray-600">{filteredTasks?.length || 0} 件のタスク</p>
+            <select
+              value={priorityFilter}
+              onChange={(e) => setPriorityFilter(e.target.value as Task['priority'] | 'all')}
+              className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            >
+              <option value="all">すべての優先度</option>
+              <option value="low">低</option>
+              <option value="medium">中</option>
+              <option value="high">高</option>
+            </select>
+
+            <p className="text-gray-600">
+              {filteredTasks.length} 件のタスク
+              {searchQuery && ` (${tasks?.length || 0} 件中)`}
+            </p>
           </div>
 
           <button
             onClick={handleCreateTask}
-            className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 flex items-center gap-2"
+            className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 flex items-center gap-2 whitespace-nowrap"
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path
@@ -158,7 +209,7 @@ export const Tasks = () => {
         </div>
       </div>
 
-      {filteredTasks && filteredTasks.length > 0 ? (
+      {filteredTasks.length > 0 ? (
         statusFilter === 'all' ? (
           // カンバンボード表示
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -242,16 +293,24 @@ export const Tasks = () => {
               d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
             />
           </svg>
-          <h3 className="mt-2 text-sm font-medium text-gray-900">タスクがありません</h3>
-          <p className="mt-1 text-sm text-gray-500">新規タスクを作成して始めましょう</p>
-          <div className="mt-6">
-            <button
-              onClick={handleCreateTask}
-              className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700"
-            >
-              新規タスク
-            </button>
-          </div>
+          <h3 className="mt-2 text-sm font-medium text-gray-900">
+            {searchQuery ? '検索結果がありません' : 'タスクがありません'}
+          </h3>
+          <p className="mt-1 text-sm text-gray-500">
+            {searchQuery
+              ? '別のキーワードで検索してみてください'
+              : '新規タスクを作成して始めましょう'}
+          </p>
+          {!searchQuery && (
+            <div className="mt-6">
+              <button
+                onClick={handleCreateTask}
+                className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700"
+              >
+                新規タスク
+              </button>
+            </div>
+          )}
         </div>
       )}
 
