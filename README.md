@@ -1,5 +1,7 @@
 # Freelance Time Tracker
 
+[![CI](https://github.com/ruito-dev/freelance-time-tracker/actions/workflows/ci.yml/badge.svg)](https://github.com/ruito-dev/freelance-time-tracker/actions/workflows/ci.yml)
+
 フリーランス向けのタスク管理 & 時間トラッキングアプリケーション
 
 ## 概要
@@ -63,9 +65,10 @@
 - 視覚的なグラフ表示（プログレスバー）
 - CSVエクスポート機能
 
-### ✅ テスト
+### ✅ テスト & CI/CD
 - **フロントエンド**: 70テスト、97.59%カバレッジ
-- **バックエンド**: RSpecによるモデル・リクエストテスト
+- **バックエンド**: 127テスト、93.52%カバレッジ
+- **CI/CD**: GitHub Actionsによる自動テスト・Lint実行
 
 ## セットアップ
 
@@ -289,12 +292,14 @@ RESTful APIエンドポイント：
 - ✅ JWT認証の実装
 - ✅ PostgreSQLでのデータベース設計
 - ✅ ActiveRecordでのリレーション管理
-- ✅ RSpecでのテスト駆動開発
+- ✅ RSpecでのテスト駆動開発（93.52%カバレッジ）
+- ✅ RuboCop、Brakeman、Bundler Auditによるコード品質管理
 
 ### インフラ・DevOps
 - ✅ Dockerでのコンテナ化
 - ✅ Docker Composeでのマルチコンテナ管理
 - ✅ フロントエンドとバックエンドの疎結合設計
+- ✅ GitHub Actionsによる自動CI/CDパイプライン
 
 ### 設計・アーキテクチャ
 - ✅ マイクロサービス的な疎結合設計
@@ -343,10 +348,36 @@ docker-compose exec frontend npm install
   - ユーティリティ（storage, csvExport）
 
 ### バックエンド
-- **テストフレームワーク**: RSpec
+- **総テスト数**: 127テスト（全成功）
+- **カバレッジ**: 93.52% (202/216行)
+- **テストフレームワーク**: RSpec + SimpleCov
 - **テスト対象**:
   - モデル（User, Project, Task, TimeEntry）
   - APIエンドポイント（認証、プロジェクト、タスク、時間記録）
+
+## CI/CD
+
+GitHub Actionsを使用した自動化パイプライン：
+
+### バックエンド
+- **Lint & Security**:
+  - RuboCop（コードスタイル）
+  - Brakeman（セキュリティ脆弱性）
+  - Bundler Audit（依存関係の脆弱性）
+- **Tests**:
+  - RSpec（全127テスト）
+  - SimpleCov（カバレッジレポート）
+
+### フロントエンド
+- **Lint & Format**:
+  - ESLint（コード品質）
+  - Prettier（コードフォーマット）
+  - TypeScript型チェック
+- **Tests**:
+  - Vitest（全70テスト）
+  - カバレッジレポート
+
+ワークフローは `main` および `develop` ブランチへのプッシュ・プルリクエスト時に自動実行されます。
 
 ## 今後の拡張案
 
@@ -358,7 +389,7 @@ docker-compose exec frontend npm install
 - [ ] ダッシュボードの統計グラフ
 - [ ] モバイルアプリ対応
 - [ ] E2Eテスト（Playwright）の追加
-- [ ] CI/CDパイプラインの構築
+- [x] CI/CDパイプラインの構築
 
 ## ライセンス
 
