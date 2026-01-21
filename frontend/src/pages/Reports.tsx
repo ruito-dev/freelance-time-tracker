@@ -1,4 +1,5 @@
 import { useState, useMemo } from 'react';
+import { Layout } from '../components/Layout';
 import { useTimeEntries } from '../hooks/useTimeEntries';
 import { useProjects } from '../hooks/useProjects';
 
@@ -99,7 +100,7 @@ export const Reports = () => {
   }, [projectStats]);
 
   return (
-    <div className="max-w-6xl mx-auto">
+    <Layout>
       <h1 className="text-2xl font-bold text-gray-900 mb-6">レポート</h1>
 
       {/* フィルター */}
@@ -112,7 +113,7 @@ export const Reports = () => {
             <select
               value={selectedProjectId}
               onChange={(e) => setSelectedProjectId(Number(e.target.value))}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
             >
               <option value={0}>すべてのプロジェクト</option>
               {projects?.map((project) => (
@@ -131,7 +132,7 @@ export const Reports = () => {
               type="date"
               value={startDate}
               onChange={(e) => setStartDate(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
             />
           </div>
 
@@ -143,7 +144,7 @@ export const Reports = () => {
               type="date"
               value={endDate}
               onChange={(e) => setEndDate(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
             />
           </div>
         </div>
@@ -187,7 +188,7 @@ export const Reports = () => {
                       </div>
                       <div className="w-full bg-gray-200 rounded-full h-2">
                         <div
-                          className="bg-blue-600 h-2 rounded-full"
+                          className="bg-indigo-600 h-2 rounded-full"
                           style={{ width: `${(stat.hours / totalHours) * 100}%` }}
                         />
                       </div>
@@ -261,6 +262,6 @@ export const Reports = () => {
           </div>
         </>
       )}
-    </div>
+    </Layout>
   );
 };

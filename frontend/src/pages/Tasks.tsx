@@ -1,15 +1,13 @@
 import { useState } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import { TaskCard } from '../components/TaskCard';
 import { TaskFormModal } from '../components/TaskFormModal';
+import { Layout } from '../components/Layout';
 import { useTasks, useCreateTask, useUpdateTask, useDeleteTask } from '../hooks/useTasks';
 import { useProjects } from '../hooks/useProjects';
-import { useLogout } from '../hooks/useAuth';
 import type { Task } from '../types/task';
 
 export const Tasks = () => {
-  const navigate = useNavigate();
-  const logout = useLogout();
   const [searchParams, setSearchParams] = useSearchParams();
   const projectIdParam = searchParams.get('project');
   const projectId = projectIdParam ? Number(projectIdParam) : undefined;
@@ -23,10 +21,6 @@ export const Tasks = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingTask, setEditingTask] = useState<Task | null>(null);
   const [statusFilter, setStatusFilter] = useState<Task['status'] | 'all'>('all');
-
-  const handleLogout = () => {
-    logout();
-  };
 
   const handleCreateTask = () => {
     setEditingTask(null);
@@ -115,33 +109,10 @@ export const Tasks = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <header className="bg-white shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <div className="flex items-center justify-between">
-            <h1 className="text-2xl font-bold text-gray-900">タスク管理</h1>
-            <div className="flex items-center gap-4">
-              <button onClick={() => navigate('/')} className="text-gray-600 hover:text-gray-900">
-                ダッシュボード
-              </button>
-              <button
-                onClick={() => navigate('/projects')}
-                className="text-gray-600 hover:text-gray-900"
-              >
-                プロジェクト
-              </button>
-              <button onClick={handleLogout} className="text-gray-600 hover:text-gray-900">
-                ログアウト
-              </button>
-            </div>
-          </div>
-        </div>
-      </header>
-
-      {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="mb-6 flex items-center justify-between gap-4">
+    <Layout>
+      <div className="mb-6">
+        <h1 className="text-2xl font-bold text-gray-900 mb-4">タスク管理</h1>
+        <div className="flex items-center justify-between gap-4">
           <div className="flex items-center gap-4">
             <select
               value={projectId || 'all'}
@@ -185,104 +156,104 @@ export const Tasks = () => {
             新規タスク
           </button>
         </div>
+      </div>
 
-        {filteredTasks && filteredTasks.length > 0 ? (
-          statusFilter === 'all' ? (
-            // カンバンボード表示
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div>
-                <h2 className="text-lg font-semibold text-gray-900 mb-4">
-                  未着手 ({groupedTasks.todo.length})
-                </h2>
-                <div className="space-y-4">
-                  {groupedTasks.todo.map((task) => (
-                    <TaskCard
-                      key={task.id}
-                      task={task}
-                      onEdit={handleEditTask}
-                      onDelete={handleDeleteTask}
-                      onStatusChange={handleStatusChange}
-                    />
-                  ))}
-                </div>
-              </div>
-
-              <div>
-                <h2 className="text-lg font-semibold text-gray-900 mb-4">
-                  進行中 ({groupedTasks.in_progress.length})
-                </h2>
-                <div className="space-y-4">
-                  {groupedTasks.in_progress.map((task) => (
-                    <TaskCard
-                      key={task.id}
-                      task={task}
-                      onEdit={handleEditTask}
-                      onDelete={handleDeleteTask}
-                      onStatusChange={handleStatusChange}
-                    />
-                  ))}
-                </div>
-              </div>
-
-              <div>
-                <h2 className="text-lg font-semibold text-gray-900 mb-4">
-                  完了 ({groupedTasks.done.length})
-                </h2>
-                <div className="space-y-4">
-                  {groupedTasks.done.map((task) => (
-                    <TaskCard
-                      key={task.id}
-                      task={task}
-                      onEdit={handleEditTask}
-                      onDelete={handleDeleteTask}
-                      onStatusChange={handleStatusChange}
-                    />
-                  ))}
-                </div>
+      {filteredTasks && filteredTasks.length > 0 ? (
+        statusFilter === 'all' ? (
+          // カンバンボード表示
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div>
+              <h2 className="text-lg font-semibold text-gray-900 mb-4">
+                未着手 ({groupedTasks.todo.length})
+              </h2>
+              <div className="space-y-4">
+                {groupedTasks.todo.map((task) => (
+                  <TaskCard
+                    key={task.id}
+                    task={task}
+                    onEdit={handleEditTask}
+                    onDelete={handleDeleteTask}
+                    onStatusChange={handleStatusChange}
+                  />
+                ))}
               </div>
             </div>
-          ) : (
-            // リスト表示
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {filteredTasks.map((task) => (
-                <TaskCard
-                  key={task.id}
-                  task={task}
-                  onEdit={handleEditTask}
-                  onDelete={handleDeleteTask}
-                  onStatusChange={handleStatusChange}
-                />
-              ))}
+
+            <div>
+              <h2 className="text-lg font-semibold text-gray-900 mb-4">
+                進行中 ({groupedTasks.in_progress.length})
+              </h2>
+              <div className="space-y-4">
+                {groupedTasks.in_progress.map((task) => (
+                  <TaskCard
+                    key={task.id}
+                    task={task}
+                    onEdit={handleEditTask}
+                    onDelete={handleDeleteTask}
+                    onStatusChange={handleStatusChange}
+                  />
+                ))}
+              </div>
             </div>
-          )
-        ) : (
-          <div className="text-center py-12">
-            <svg
-              className="mx-auto h-12 w-12 text-gray-400"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
-              />
-            </svg>
-            <h3 className="mt-2 text-sm font-medium text-gray-900">タスクがありません</h3>
-            <p className="mt-1 text-sm text-gray-500">新規タスクを作成して始めましょう</p>
-            <div className="mt-6">
-              <button
-                onClick={handleCreateTask}
-                className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700"
-              >
-                新規タスク
-              </button>
+
+            <div>
+              <h2 className="text-lg font-semibold text-gray-900 mb-4">
+                完了 ({groupedTasks.done.length})
+              </h2>
+              <div className="space-y-4">
+                {groupedTasks.done.map((task) => (
+                  <TaskCard
+                    key={task.id}
+                    task={task}
+                    onEdit={handleEditTask}
+                    onDelete={handleDeleteTask}
+                    onStatusChange={handleStatusChange}
+                  />
+                ))}
+              </div>
             </div>
           </div>
-        )}
-      </main>
+        ) : (
+          // リスト表示
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {filteredTasks.map((task) => (
+              <TaskCard
+                key={task.id}
+                task={task}
+                onEdit={handleEditTask}
+                onDelete={handleDeleteTask}
+                onStatusChange={handleStatusChange}
+              />
+            ))}
+          </div>
+        )
+      ) : (
+        <div className="text-center py-12">
+          <svg
+            className="mx-auto h-12 w-12 text-gray-400"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
+            />
+          </svg>
+          <h3 className="mt-2 text-sm font-medium text-gray-900">タスクがありません</h3>
+          <p className="mt-1 text-sm text-gray-500">新規タスクを作成して始めましょう</p>
+          <div className="mt-6">
+            <button
+              onClick={handleCreateTask}
+              className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700"
+            >
+              新規タスク
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* Modal */}
       {projects && (
@@ -296,6 +267,6 @@ export const Tasks = () => {
           isLoading={createTask.isPending || updateTask.isPending}
         />
       )}
-    </div>
+    </Layout>
   );
 };
