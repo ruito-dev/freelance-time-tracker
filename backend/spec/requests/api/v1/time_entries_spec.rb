@@ -1,10 +1,6 @@
 require 'rails_helper'
 
 RSpec.describe 'Api::V1::TimeEntries', type: :request do
-  before do
-    host! 'localhost'
-  end
-
   let(:user) { create(:user) }
   let(:project) { create(:project, user: user) }
   let(:task) { create(:task, project: project) }

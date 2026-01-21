@@ -1,10 +1,6 @@
 require 'rails_helper'
 
 RSpec.describe 'Api::V1::Tasks', type: :request do
-  before do
-    host! 'localhost'
-  end
-
   let(:user) { create(:user) }
   let(:project) { create(:project, user: user) }
   let(:other_user) { create(:user) }
