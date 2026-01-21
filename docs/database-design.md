@@ -40,7 +40,7 @@ erDiagram
         bigint id PK
         datetime started_at
         datetime ended_at
-        integer duration "秒単位"
+        decimal duration "時間単位(小数点以下2桁)"
         bigint task_id FK
         datetime created_at
         datetime updated_at
@@ -153,8 +153,8 @@ todo → in_progress → done
 |---------|-----|------|-----------|------|
 | id | bigint | NO | auto | 主キー |
 | started_at | datetime | NO | - | 開始日時 |
-| ended_at | datetime | YES | NULL | 終了日時(NULL=計測中) |
-| duration | integer | YES | NULL | 作業時間(秒単位) |
+| ended_at | datetime | NO | - | 終了日時 |
+| duration | decimal(10,2) | NO | - | 作業時間(時間単位、小数点以下2桁) |
 | task_id | bigint | NO | - | 外部キー(tasks) |
 | created_at | datetime | NO | CURRENT_TIMESTAMP | 作成日時 |
 | updated_at | datetime | NO | CURRENT_TIMESTAMP | 更新日時 |
@@ -168,15 +168,17 @@ todo → in_progress → done
 
 **バリデーション**:
 - started_at: 必須
-- ended_at: 終了時刻 > 開始時刻(カスタムバリデーション)
+- ended_at: 必須、終了時刻 > 開始時刻(カスタムバリデーション)
+- duration: 必須、0より大きい数値
 - task_id: 必須、存在するタスク
 
 **リレーション**:
 - `belongs_to :task`
 
 **自動計算**:
-- `stop!`メソッド呼び出し時に`duration`を自動計算
-- `duration = (ended_at - started_at).to_i` (秒単位)
+- 保存前に`duration`を自動計算(`before_validation`コールバック)
+- `duration = ((ended_at - started_at) / 3600.0).round(2)` (時間単位、小数点以下2桁)
+- 例: 1時間30分 = 1.5、2時間45分 = 2.75
 
 ---
 
@@ -332,6 +334,10 @@ belongs_to :project, counter_cache: true
 | 20260120124500 | create_projects.rb | projectsテーブル作成 |
 | 20260120124600 | create_tasks.rb | tasksテーブル作成 |
 | 20260120124700 | create_time_entries.rb | time_entriesテーブル作成 |
+| 20260120140545 | add_color_to_projects.rb | projectsテーブルにcolorカラム追加 |
+| 20260120151950 | add_priority_and_due_date_to_tasks.rb | tasksテーブルにpriorityとdue_dateカラム追加 |
+| 20260120154212 | add_description_to_time_entries.rb | time_entriesテーブルにdescriptionカラム追加 |
+| 20260121085231 | change_duration_to_decimal_in_time_entries.rb | time_entriesのdurationをintegerからdecimal(10,2)に変更 |
 
 ---
 

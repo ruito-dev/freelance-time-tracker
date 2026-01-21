@@ -4,6 +4,7 @@ FactoryBot.define do
     title { "タスク#{rand(1000)}" }
     description { "タスクの説明" }
     status { "todo" }
-    estimated_hours { 5.0 }
+    priority { "medium" }
+    due_date { nil }
   end
 end

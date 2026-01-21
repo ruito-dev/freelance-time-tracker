@@ -31,7 +31,7 @@ module Api
 
       # POST /api/v1/time_entries
       def create
-        task = current_user.projects.joins(:tasks).find_by(tasks: { id: time_entry_params[:task_id] })
+        task = Task.joins(:project).find_by(id: time_entry_params[:task_id], projects: { user_id: current_user.id })
         unless task
           return render json: { error: "タスクが見つかりません" }, status: :not_found
         end
@@ -58,6 +58,24 @@ module Api
       def destroy
         @time_entry.destroy
         head :no_content
+      end
+
+      # GET /api/v1/time_entries/summary
+      def summary
+        @time_entries = TimeEntry.joins(task: :project)
+                                  .where(projects: { user_id: current_user.id })
+
+        # 日付範囲でフィルタリング
+        if params[:start_date].present?
+          @time_entries = @time_entries.where("started_at >= ?", params[:start_date])
+        end
+        if params[:end_date].present?
+          @time_entries = @time_entries.where("started_at <= ?", params[:end_date])
+        end
+
+        total_duration = @time_entries.sum(:duration)
+        
+        render json: { total_duration: total_duration }
       end
 
       private
