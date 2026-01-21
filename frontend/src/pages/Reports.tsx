@@ -2,6 +2,7 @@ import { useState, useMemo } from 'react';
 import { Layout } from '../components/Layout';
 import { useTimeEntries } from '../hooks/useTimeEntries';
 import { useProjects } from '../hooks/useProjects';
+import { exportToCSV, formatDateForFilename } from '../utils/csvExport';
 
 export const Reports = () => {
   const [selectedProjectId, setSelectedProjectId] = useState<number>(0);
@@ -99,9 +100,86 @@ export const Reports = () => {
     return projectStats.reduce((sum, stat) => sum + stat.hours, 0);
   }, [projectStats]);
 
+  // CSVエクスポート関数
+  const handleExportProjectStats = () => {
+    const data = [
+      ['プロジェクト名', '作業時間（時間）', '記録数'],
+      ...projectStats.map((stat) => [stat.name, stat.hours.toFixed(2), stat.count]),
+      ['合計', totalHours.toFixed(2), projectStats.reduce((sum, stat) => sum + stat.count, 0)],
+    ];
+    exportToCSV(data, `プロジェクト別レポート_${formatDateForFilename()}.csv`);
+  };
+
+  const handleExportTaskStats = () => {
+    const data = [
+      ['タスク名', 'プロジェクト名', '作業時間（時間）', '記録数'],
+      ...taskStats.map((stat) => [
+        stat.title,
+        stat.projectName,
+        stat.hours.toFixed(2),
+        stat.count,
+      ]),
+    ];
+    exportToCSV(data, `タスク別レポート_${formatDateForFilename()}.csv`);
+  };
+
+  const handleExportDailyStats = () => {
+    const data = [
+      ['日付', '作業時間（時間）'],
+      ...dailyStats.map((stat) => [stat.date, stat.hours.toFixed(2)]),
+    ];
+    exportToCSV(data, `日別レポート_${formatDateForFilename()}.csv`);
+  };
+
+  const handleExportTimeEntries = () => {
+    if (!timeEntries) return;
+
+    const data = [
+      ['日付', '開始時刻', '終了時刻', 'プロジェクト', 'タスク', '説明', '作業時間（時間）'],
+      ...timeEntries
+        .filter((entry) => entry.ended_at)
+        .map((entry) => {
+          const start = new Date(entry.started_at);
+          const end = new Date(entry.ended_at!);
+          const hours = (end.getTime() - start.getTime()) / (1000 * 60 * 60);
+
+          return [
+            start.toLocaleDateString('ja-JP'),
+            start.toLocaleTimeString('ja-JP'),
+            end.toLocaleTimeString('ja-JP'),
+            entry.task.project?.name || '不明',
+            entry.task.title,
+            entry.description || '',
+            hours.toFixed(2),
+          ];
+        }),
+    ];
+    exportToCSV(data, `時間記録詳細_${formatDateForFilename()}.csv`);
+  };
+
   return (
     <Layout>
-      <h1 className="text-2xl font-bold text-gray-900 mb-6">レポート</h1>
+      <div className="flex items-center justify-between mb-6">
+        <h1 className="text-2xl font-bold text-gray-900">レポート</h1>
+        {timeEntries && timeEntries.length > 0 && (
+          <div className="flex gap-2">
+            <button
+              onClick={handleExportTimeEntries}
+              className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 flex items-center gap-2 text-sm"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                />
+              </svg>
+              全データをエクスポート
+            </button>
+          </div>
+        )}
+      </div>
 
       {/* フィルター */}
       <div className="bg-white rounded-lg shadow p-4 mb-6">
@@ -174,7 +252,25 @@ export const Reports = () => {
 
           {/* プロジェクト別 */}
           <div className="bg-white rounded-lg shadow p-6 mb-6">
-            <h2 className="text-lg font-bold text-gray-900 mb-4">プロジェクト別</h2>
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-lg font-bold text-gray-900">プロジェクト別</h2>
+              {projectStats.length > 0 && (
+                <button
+                  onClick={handleExportProjectStats}
+                  className="px-3 py-1 text-sm bg-indigo-600 text-white rounded-md hover:bg-indigo-700 flex items-center gap-1"
+                >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                    />
+                  </svg>
+                  CSV
+                </button>
+              )}
+            </div>
             {projectStats.length > 0 ? (
               <div className="space-y-3">
                 {projectStats.map((stat, index) => (
@@ -203,7 +299,25 @@ export const Reports = () => {
 
           {/* タスク別 */}
           <div className="bg-white rounded-lg shadow p-6 mb-6">
-            <h2 className="text-lg font-bold text-gray-900 mb-4">タスク別</h2>
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-lg font-bold text-gray-900">タスク別</h2>
+              {taskStats.length > 0 && (
+                <button
+                  onClick={handleExportTaskStats}
+                  className="px-3 py-1 text-sm bg-indigo-600 text-white rounded-md hover:bg-indigo-700 flex items-center gap-1"
+                >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                    />
+                  </svg>
+                  CSV
+                </button>
+              )}
+            </div>
             {taskStats.length > 0 ? (
               <div className="overflow-x-auto">
                 <table className="min-w-full divide-y divide-gray-200">
@@ -246,7 +360,25 @@ export const Reports = () => {
 
           {/* 日別 */}
           <div className="bg-white rounded-lg shadow p-6">
-            <h2 className="text-lg font-bold text-gray-900 mb-4">日別</h2>
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-lg font-bold text-gray-900">日別</h2>
+              {dailyStats.length > 0 && (
+                <button
+                  onClick={handleExportDailyStats}
+                  className="px-3 py-1 text-sm bg-indigo-600 text-white rounded-md hover:bg-indigo-700 flex items-center gap-1"
+                >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                    />
+                  </svg>
+                  CSV
+                </button>
+              )}
+            </div>
             {dailyStats.length > 0 ? (
               <div className="space-y-2">
                 {dailyStats.map((stat, index) => (
