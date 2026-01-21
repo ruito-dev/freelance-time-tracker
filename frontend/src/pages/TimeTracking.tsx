@@ -76,9 +76,7 @@ export const TimeTracking = () => {
       <div className="bg-white rounded-lg shadow p-4 mb-6">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              プロジェクト
-            </label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">プロジェクト</label>
             <select
               value={selectedProjectId}
               onChange={(e) => handleProjectFilterChange(Number(e.target.value))}
@@ -94,9 +92,7 @@ export const TimeTracking = () => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              開始日
-            </label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">開始日</label>
             <input
               type="date"
               value={startDate}
@@ -106,9 +102,7 @@ export const TimeTracking = () => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              終了日
-            </label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">終了日</label>
             <input
               type="date"
               value={endDate}
@@ -121,7 +115,10 @@ export const TimeTracking = () => {
         {timeEntries && timeEntries.length > 0 && (
           <div className="mt-4 pt-4 border-t border-gray-200">
             <div className="text-sm text-gray-600">
-              合計時間: <span className="font-semibold text-gray-900">{calculateTotalHours().toFixed(2)}時間</span>
+              合計時間:{' '}
+              <span className="font-semibold text-gray-900">
+                {calculateTotalHours().toFixed(2)}時間
+              </span>
             </div>
           </div>
         )}
@@ -133,17 +130,11 @@ export const TimeTracking = () => {
       ) : timeEntries && timeEntries.length > 0 ? (
         <div className="space-y-4">
           {timeEntries.map((timeEntry) => (
-            <TimeEntryCard
-              key={timeEntry.id}
-              timeEntry={timeEntry}
-              onEdit={handleEdit}
-            />
+            <TimeEntryCard key={timeEntry.id} timeEntry={timeEntry} onEdit={handleEdit} />
           ))}
         </div>
       ) : (
-        <div className="text-center py-8 text-gray-500">
-          時間記録がありません
-        </div>
+        <div className="text-center py-8 text-gray-500">時間記録がありません</div>
       )}
 
       {/* モーダル */}

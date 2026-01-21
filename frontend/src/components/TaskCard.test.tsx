@@ -96,10 +96,10 @@ describe('TaskCard', () => {
     it('ステータスを変更するとonStatusChangeが呼ばれる', async () => {
       const user = userEvent.setup();
       renderTaskCard();
-      
+
       const select = screen.getByRole('combobox');
       await user.selectOptions(select, 'done');
-      
+
       expect(mockOnStatusChange).toHaveBeenCalledWith(1, 'done');
       expect(mockOnStatusChange).toHaveBeenCalledTimes(1);
     });
@@ -174,10 +174,10 @@ describe('TaskCard', () => {
     it('編集ボタンをクリックするとonEditが呼ばれる', async () => {
       const user = userEvent.setup();
       renderTaskCard();
-      
+
       const editButton = screen.getByRole('button', { name: '編集' });
       await user.click(editButton);
-      
+
       expect(mockOnEdit).toHaveBeenCalledWith(mockTask);
       expect(mockOnEdit).toHaveBeenCalledTimes(1);
     });
@@ -186,10 +186,10 @@ describe('TaskCard', () => {
       const user = userEvent.setup();
       window.confirm = vi.fn(() => true);
       renderTaskCard();
-      
+
       const deleteButton = screen.getByRole('button', { name: '削除' });
       await user.click(deleteButton);
-      
+
       expect(window.confirm).toHaveBeenCalledWith('このタスクを削除しますか？');
       expect(mockOnDelete).toHaveBeenCalledWith(1);
       expect(mockOnDelete).toHaveBeenCalledTimes(1);
@@ -199,10 +199,10 @@ describe('TaskCard', () => {
       const user = userEvent.setup();
       window.confirm = vi.fn(() => false);
       renderTaskCard();
-      
+
       const deleteButton = screen.getByRole('button', { name: '削除' });
       await user.click(deleteButton);
-      
+
       expect(window.confirm).toHaveBeenCalled();
       expect(mockOnDelete).not.toHaveBeenCalled();
     });

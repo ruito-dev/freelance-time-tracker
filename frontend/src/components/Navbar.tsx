@@ -71,34 +71,19 @@ export const Navbar = () => {
       {/* モバイルメニュー */}
       <div className="md:hidden">
         <div className="px-2 pt-2 pb-3 space-y-1">
-          <Link
-            to="/"
-            className={`block ${navLinkClass('/')}`}
-          >
+          <Link to="/" className={`block ${navLinkClass('/')}`}>
             ダッシュボード
           </Link>
-          <Link
-            to="/projects"
-            className={`block ${navLinkClass('/projects')}`}
-          >
+          <Link to="/projects" className={`block ${navLinkClass('/projects')}`}>
             プロジェクト
           </Link>
-          <Link
-            to="/tasks"
-            className={`block ${navLinkClass('/tasks')}`}
-          >
+          <Link to="/tasks" className={`block ${navLinkClass('/tasks')}`}>
             タスク
           </Link>
-          <Link
-            to="/time-tracking"
-            className={`block ${navLinkClass('/time-tracking')}`}
-          >
+          <Link to="/time-tracking" className={`block ${navLinkClass('/time-tracking')}`}>
             時間記録
           </Link>
-          <Link
-            to="/reports"
-            className={`block ${navLinkClass('/reports')}`}
-          >
+          <Link to="/reports" className={`block ${navLinkClass('/reports')}`}>
             レポート
           </Link>
         </div>

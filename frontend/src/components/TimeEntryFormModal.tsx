@@ -100,9 +100,7 @@ export const TimeEntryFormModal = ({
 
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              タスク *
-            </label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">タスク *</label>
             <select
               value={taskId}
               onChange={(e) => setTaskId(Number(e.target.value))}
@@ -119,9 +117,7 @@ export const TimeEntryFormModal = ({
           </div>
 
           <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              開始時刻 *
-            </label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">開始時刻 *</label>
             <input
               type="datetime-local"
               value={startTime}
@@ -132,9 +128,7 @@ export const TimeEntryFormModal = ({
           </div>
 
           <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              終了時刻
-            </label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">終了時刻</label>
             <input
               type="datetime-local"
               value={endTime}
@@ -144,9 +138,7 @@ export const TimeEntryFormModal = ({
           </div>
 
           <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              説明
-            </label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">説明</label>
             <textarea
               value={description}
               onChange={(e) => setDescription(e.target.value)}

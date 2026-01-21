@@ -1,10 +1,6 @@
 require 'rails_helper'
 
 RSpec.describe 'Api::V1::Projects', type: :request do
-  before do
-    host! 'localhost'
-  end
-
   let(:user) { create(:user) }
   let(:other_user) { create(:user) }
   let(:token) { JsonWebToken.encode(user_id: user.id) }

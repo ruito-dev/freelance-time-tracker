@@ -1,10 +1,6 @@
 require 'rails_helper'
 
 RSpec.describe 'Api::V1::TimeEntries', type: :request do
-  before do
-    host! 'localhost'
-  end
-
   let(:user) { create(:user) }
   let(:project) { create(:project, user: user) }
   let(:task) { create(:task, project: project) }
@@ -161,7 +157,7 @@ RSpec.describe 'Api::V1::TimeEntries', type: :request do
 
     context 'when not authenticated' do
       it 'returns unauthorized' do
-        patch "/api/v1/time_entries/#{time_entry.id}", 
+        patch "/api/v1/time_entries/#{time_entry.id}",
               params: { time_entry: { duration: 2.0 } }
         expect(response).to have_http_status(:unauthorized)
       end
@@ -203,7 +199,7 @@ RSpec.describe 'Api::V1::TimeEntries', type: :request do
 
     context 'when authenticated' do
       it 'returns summary for date range' do
-        get "/api/v1/time_entries/summary?start_date=#{Date.today}&end_date=#{Date.today}", 
+        get "/api/v1/time_entries/summary?start_date=#{Date.today}&end_date=#{Date.today}",
             headers: headers
         expect(response).to have_http_status(:ok)
         json = JSON.parse(response.body)

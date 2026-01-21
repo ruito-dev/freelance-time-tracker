@@ -53,9 +53,7 @@ export const TimeEntryCard = ({ timeEntry, onEdit }: TimeEntryCardProps) => {
       <div className="flex justify-between items-start mb-2">
         <div className="flex-1">
           <h3 className="font-semibold text-gray-900">{timeEntry.task.title}</h3>
-          <p className="text-sm text-gray-600">
-            {timeEntry.task.project?.name}
-          </p>
+          <p className="text-sm text-gray-600">{timeEntry.task.project?.name}</p>
         </div>
         <div className="flex gap-2">
           <button
@@ -81,9 +79,7 @@ export const TimeEntryCard = ({ timeEntry, onEdit }: TimeEntryCardProps) => {
       <div className="flex items-center justify-between text-sm text-gray-600">
         <div>
           <div>開始: {formatDateTime(timeEntry.started_at)}</div>
-          {timeEntry.ended_at && (
-            <div>終了: {formatDateTime(timeEntry.ended_at)}</div>
-          )}
+          {timeEntry.ended_at && <div>終了: {formatDateTime(timeEntry.ended_at)}</div>}
         </div>
         <div className="text-right">
           <div className="font-semibold text-gray-900">{calculateDuration()}</div>

@@ -11,14 +11,14 @@ RSpec.describe Task, type: :model do
 
     it { should validate_presence_of(:title) }
     it { should validate_presence_of(:status) }
-    
+
     it 'validates status inclusion' do
       task = build(:task, status: 'todo')
       expect(task).to be_valid
-      
+
       task.status = 'in_progress'
       expect(task).to be_valid
-      
+
       task.status = 'done'
       expect(task).to be_valid
     end

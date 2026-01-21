@@ -10,7 +10,7 @@ RSpec.describe TimeEntry, type: :model do
 
     it { should validate_presence_of(:started_at) }
     it { should validate_presence_of(:ended_at) }
-    
+
     it 'validates duration is present after save' do
       time_entry = create(:time_entry)
       expect(time_entry.duration).to be_present

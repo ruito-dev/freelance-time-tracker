@@ -12,10 +12,10 @@ module Api
         else
           @tasks = Task.joins(:project).where(projects: { user_id: current_user.id }).includes(:project).order(created_at: :desc)
         end
-        
+
         # ステータスでフィルタリング
         @tasks = @tasks.where(status: params[:status]) if params[:status].present?
-        
+
         render json: @tasks, include: :project
       end
 

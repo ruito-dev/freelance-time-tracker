@@ -1,10 +1,6 @@
 require 'rails_helper'
 
 RSpec.describe 'Api::V1::Tasks', type: :request do
-  before do
-    host! 'localhost'
-  end
-
   let(:user) { create(:user) }
   let(:project) { create(:project, user: user) }
   let(:other_user) { create(:user) }
@@ -124,7 +120,7 @@ RSpec.describe 'Api::V1::Tasks', type: :request do
 
     context 'when authenticated' do
       it 'updates the task' do
-        patch "/api/v1/tasks/#{task.id}", 
+        patch "/api/v1/tasks/#{task.id}",
               params: { task: { title: 'Updated Title', status: 'in_progress' } },
               headers: headers
         expect(response).to have_http_status(:ok)

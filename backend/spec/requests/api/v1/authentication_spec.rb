@@ -1,10 +1,6 @@
 require 'rails_helper'
 
 RSpec.describe 'Api::V1::Authentication', type: :request do
-  before do
-    host! 'localhost'
-  end
-
   describe 'POST /api/v1/auth/signup' do
     let(:valid_attributes) do
       {

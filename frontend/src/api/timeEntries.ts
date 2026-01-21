@@ -23,8 +23,13 @@ export const createTimeEntry = async (data: CreateTimeEntryData): Promise<TimeEn
   return response.data;
 };
 
-export const updateTimeEntry = async (id: number, data: UpdateTimeEntryData): Promise<TimeEntry> => {
-  const response = await apiClient.patch<TimeEntry>(`/api/v1/time_entries/${id}`, { time_entry: data });
+export const updateTimeEntry = async (
+  id: number,
+  data: UpdateTimeEntryData
+): Promise<TimeEntry> => {
+  const response = await apiClient.patch<TimeEntry>(`/api/v1/time_entries/${id}`, {
+    time_entry: data,
+  });
   return response.data;
 };
 

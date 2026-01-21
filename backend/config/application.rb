@@ -11,6 +11,9 @@ module App
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 8.1
 
+    # テスト環境でRSpecのデフォルトホスト(www.example.com)を許可
+    config.hosts << "www.example.com" if Rails.env.test?
+
     # Please, add to the `ignore` list any other `lib` subdirectories that do
     # not contain `.rb` files, or that should not be reloaded or eager loaded.
     # Common ones are `templates`, `generators`, or `middleware`, for example.
