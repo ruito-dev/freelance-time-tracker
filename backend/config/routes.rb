@@ -24,7 +24,11 @@ Rails.application.routes.draw do
         resources :tasks, only: [ :index, :create ]
       end
       resources :tasks, only: [ :index, :show, :update, :destroy ]
-      resources :time_entries
+      resources :time_entries do
+        collection do
+          get :summary
+        end
+      end
     end
   end
 end

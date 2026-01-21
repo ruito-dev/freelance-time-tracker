@@ -16,11 +16,16 @@
 - **TanStack Query 5.90.19** - サーバーステート管理
 - **React Router 7.12.0** - ルーティング
 - **Axios 1.13.2** - HTTP通信
+- **Vitest 4.0.17** - テストフレームワーク
+- **React Testing Library 16.3.2** - コンポーネントテスト
 
 ### Backend
 - **Ruby on Rails 8.1** - APIモード
 - **PostgreSQL 17** - データベース
 - **JWT** - 認証（bcrypt + jwt gem）
+- **RSpec 6.0** - テストフレームワーク
+- **FactoryBot** - テストデータ生成
+- **SimpleCov** - カバレッジ測定
 
 ### Infrastructure
 - **Docker & Docker Compose** - コンテナ化
@@ -56,6 +61,11 @@
 - タスク別の作業時間集計
 - 日別の作業時間推移
 - 視覚的なグラフ表示（プログレスバー）
+- CSVエクスポート機能
+
+### ✅ テスト
+- **フロントエンド**: 70テスト、97.59%カバレッジ
+- **バックエンド**: RSpecによるモデル・リクエストテスト
 
 ## セットアップ
 
@@ -142,8 +152,12 @@ docker-compose exec backend rails db:migrate
 # ルーティング確認
 docker-compose exec backend rails routes
 
-# テスト実行（RSpecがセットアップされている場合）
-docker-compose exec backend rspec
+# テスト実行
+docker-compose exec backend bundle exec rspec
+
+# カバレッジ付きテスト実行
+docker-compose exec backend bundle exec rspec
+# カバレッジレポートは backend/coverage/index.html に生成されます
 ```
 
 ### フロントエンド開発
@@ -160,6 +174,15 @@ docker-compose exec frontend npm run lint
 
 # ビルド
 docker-compose exec frontend npm run build
+
+# テスト実行
+docker-compose exec frontend npm test
+
+# カバレッジ付きテスト実行
+docker-compose exec frontend npm run test:coverage
+
+# テストUIモード
+docker-compose exec frontend npm run test:ui
 ```
 
 ### コンテナの停止
@@ -259,12 +282,14 @@ RESTful APIエンドポイント：
 - ✅ Tailwind CSSでのモダンなUI実装
 - ✅ React Routerでのルーティング
 - ✅ カスタムフックでのロジック分離
+- ✅ Vitest + React Testing Libraryでのテスト（97.59%カバレッジ）
 
 ### バックエンド
 - ✅ Rails APIモードでのRESTful API設計
 - ✅ JWT認証の実装
 - ✅ PostgreSQLでのデータベース設計
 - ✅ ActiveRecordでのリレーション管理
+- ✅ RSpecでのテスト駆動開発
 
 ### インフラ・DevOps
 - ✅ Dockerでのコンテナ化
@@ -308,14 +333,32 @@ docker-compose exec frontend rm -rf node_modules
 docker-compose exec frontend npm install
 ```
 
+## テストカバレッジ
+
+### フロントエンド
+- **総テスト数**: 70テスト
+- **カバレッジ**: 97.59% (Statements), 93.02% (Branch), 100% (Functions)
+- **テスト対象**:
+  - コンポーネント（SearchBar, ProjectCard, TaskCard）
+  - ユーティリティ（storage, csvExport）
+
+### バックエンド
+- **テストフレームワーク**: RSpec
+- **テスト対象**:
+  - モデル（User, Project, Task, TimeEntry）
+  - APIエンドポイント（認証、プロジェクト、タスク、時間記録）
+
 ## 今後の拡張案
 
 - [ ] タイマー機能（リアルタイムで時間計測）
-- [ ] CSV/PDFエクスポート機能
+- [x] CSVエクスポート機能
+- [ ] PDFエクスポート機能
 - [ ] 請求書生成機能
 - [ ] チーム機能（複数ユーザー対応）
 - [ ] ダッシュボードの統計グラフ
 - [ ] モバイルアプリ対応
+- [ ] E2Eテスト（Playwright）の追加
+- [ ] CI/CDパイプラインの構築
 
 ## ライセンス
 

@@ -2,9 +2,11 @@ class TimeEntry < ApplicationRecord
   belongs_to :task
 
   validates :started_at, presence: true
-  validate :ended_at_after_started_at, if: -> { ended_at.present? }
+  validates :ended_at, presence: true
+  validates :duration, presence: true, numericality: { greater_than: 0 }
+  validate :ended_at_after_started_at, if: -> { started_at.present? && ended_at.present? }
 
-  before_save :calculate_duration, if: -> { ended_at.present? && ended_at_changed? }
+  before_validation :calculate_duration, if: -> { started_at.present? && ended_at.present? }
 
   scope :active, -> { where(ended_at: nil) }
   scope :completed, -> { where.not(ended_at: nil) }
@@ -26,6 +28,7 @@ class TimeEntry < ApplicationRecord
   end
 
   def calculate_duration
-    self.duration = (ended_at - started_at).to_i if started_at && ended_at
+    # 時間単位で保存（小数点以下も含む）
+    self.duration = ((ended_at - started_at) / 3600.0).round(2) if started_at && ended_at
   end
 end
