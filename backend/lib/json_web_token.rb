@@ -3,7 +3,7 @@
 # JWTトークンのエンコード・デコードを行うモジュール
 module JsonWebToken
   # 秘密鍵（環境変数から取得、なければRailsのsecret_key_baseを使用）
-  SECRET_KEY = ENV.fetch("JWT_SECRET_KEY") { Rails.application.credentials.secret_key_base }
+  SECRET_KEY = ENV.fetch("JWT_SECRET_KEY") { Rails.application.secret_key_base }
 
   # トークンの有効期限（24時間）
   EXPIRATION_TIME = 24.hours.from_now.to_i
